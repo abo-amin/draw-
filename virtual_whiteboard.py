@@ -83,9 +83,17 @@ with HandLandmarker.create_from_options(options) as landmarker:
             ring_up = is_finger_up(landmarks, 16, 14)
             pinky_up = is_finger_up(landmarks, 20, 18)
 
+            middle_only = middle_up and not index_up and not ring_up and not pinky_up
+
             fingers_up = sum([index_up, middle_up, ring_up, pinky_up])
 
-            if fingers_up == 0:
+            if middle_only:
+                cv2.putText(image, "YA HARAM!", (wCam // 2 - 120, hCam // 2), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 255), 3)
+                cv2.putText(image, "SHAME ON YOU!", (wCam // 2 - 140, hCam // 2 + 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+                px, py = 0, 0
+                smooth_x, smooth_y = 0, 0
+
+            elif fingers_up == 0:
                 clear_frames += 1
                 progress = clear_frames / CLEAR_THRESHOLD
                 cv2.rectangle(image, (10, 10), (int(300 * progress), 40), (0, 0, 255), -1)
@@ -153,7 +161,7 @@ with HandLandmarker.create_from_options(options) as landmarker:
             cv2.putText(combined, "PAUSED", (wCam // 2 - 50, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
 
         y_offset = 10
-        instructions = ["Fist: Clear", "Index: Draw", "2 Fingers: Pause", "3 Fingers: Color"]
+        instructions = ["Fist: Clear", "Index: Draw", "2 Fingers: Pause", "3 Fingers: Color", "Middle: ???"]
         for text in instructions:
             cv2.rectangle(combined, (wCam - 180, y_offset), (wCam - 10, y_offset + 30), (50, 50, 50), -1)
             cv2.putText(combined, text, (wCam - 170, y_offset + 22), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
