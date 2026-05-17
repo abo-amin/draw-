@@ -88,8 +88,8 @@ with HandLandmarker.create_from_options(options) as landmarker:
             fingers_up = sum([index_up, middle_up, ring_up, pinky_up])
 
             if middle_only:
-                cv2.putText(image, "\u064a\u0627 \u0639\u0631\u0635", (wCam // 2 - 100, hCam // 2), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 255), 3)
-                cv2.putText(image, "\u0627\u0642\u0639\u062f \u0639\u0644\u064a \u062c\u0646\u0628", (wCam // 2 - 140, hCam // 2 + 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+                cv2.putText(image, "YOU ASSHOLE", (wCam // 2 - 120, hCam // 2), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 255), 3)
+                cv2.putText(image, "STAY OUT OF MY WAY", (wCam // 2 - 160, hCam // 2 + 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
                 px, py = 0, 0
                 smooth_x, smooth_y = 0, 0
 
