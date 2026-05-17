@@ -14,7 +14,8 @@ options = HandLandmarkerOptions(
     num_hands=1,
     min_hand_detection_confidence=0.5,
     min_tracking_confidence=0.5,
-    min_hand_presence_confidence=0.5
+    min_hand_presence_confidence=0.5,
+    model_complexity=0
 )
 
 cap = cv2.VideoCapture(0)
@@ -43,10 +44,12 @@ color_changed = False
 clear_frames = 0
 CLEAR_THRESHOLD = 20
 
-SMOOTHING = 0.5
+SMOOTHING = 0.7
 smooth_x, smooth_y = 0, 0
 
 drawing = True
+
+MIN_DRAW_DISTANCE = 8
 
 def is_finger_up(landmarks, tip_idx, pip_idx):
     return landmarks[tip_idx].y < landmarks[pip_idx].y
@@ -129,10 +132,13 @@ with HandLandmarker.create_from_options(options) as landmarker:
                     drawing = True
                     sx, sy = smooth_position(cx, cy)
                     
-                    if px != 0 and py != 0:
-                        cv2.line(canvas, (px, py), (sx, sy), colors[color_index], brush_thickness)
-                    cv2.circle(canvas, (sx, sy), brush_thickness // 2, colors[color_index], -1)
-                    px, py = sx, sy
+                    dist = ((sx - px) ** 2 + (sy - py) ** 2) ** 0.5
+                    
+                    if dist > MIN_DRAW_DISTANCE or (px == 0 and py == 0):
+                        if px != 0 and py != 0:
+                            cv2.line(canvas, (px, py), (sx, sy), colors[color_index], brush_thickness)
+                        cv2.circle(canvas, (sx, sy), brush_thickness // 2, colors[color_index], -1)
+                        px, py = sx, sy
 
                 else:
                     color_changed = False
